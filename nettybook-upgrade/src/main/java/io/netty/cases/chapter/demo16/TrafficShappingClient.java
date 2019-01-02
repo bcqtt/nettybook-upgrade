@@ -44,11 +44,8 @@ public class TrafficShappingClient {
 			@Override
 			public void initChannel(SocketChannel ch)
 				throws Exception {
-			    ByteBuf delimiter = Unpooled.copiedBuffer("$_"
-				    .getBytes());
-			    ch.pipeline().addLast(
-				    new DelimiterBasedFrameDecoder(2048 * 1024,
-					    delimiter));
+			    ByteBuf delimiter = Unpooled.copiedBuffer("$_".getBytes());
+			    ch.pipeline().addLast(new DelimiterBasedFrameDecoder(2048 * 1024, delimiter));
 			    ch.pipeline().addLast(new StringDecoder());
 			    ch.pipeline().addLast(new TrafficShappingClientHandler());
 			}
