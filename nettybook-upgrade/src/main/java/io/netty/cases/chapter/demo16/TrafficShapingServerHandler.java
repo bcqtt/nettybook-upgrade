@@ -39,16 +39,14 @@ public class TrafficShapingServerHandler extends ChannelInboundHandlerAdapter {
     static ScheduledExecutorService es = Executors.newScheduledThreadPool(1);
 
     public TrafficShapingServerHandler() {
-        es.scheduleAtFixedRate(() ->
-        {
+        es.scheduleAtFixedRate(() -> {
             System.out.println("The server receive client rate is : " + counter.getAndSet(0) + " bytes/s");
         }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg)
-            throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         String body = (String) msg;
         counter.addAndGet(body.getBytes().length);
         body += "$_";

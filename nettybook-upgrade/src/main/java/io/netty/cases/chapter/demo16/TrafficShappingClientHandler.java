@@ -40,8 +40,7 @@ public class TrafficShappingClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        scheduledExecutorService.scheduleAtFixedRate(()
-                -> {
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
             ByteBuf buf = null;
             for (int i = 0; i < 10; i++) {
                 buf = Unpooled.copiedBuffer(ECHO_REQ, DELIMITER.getBytes());

@@ -32,31 +32,28 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class EventTriggerClientHandler extends ChannelInboundHandlerAdapter {
 
-    private static AtomicInteger SEQ = new AtomicInteger(0);
+	private static AtomicInteger SEQ = new AtomicInteger(0);
 
-    static final String ECHO_REQ = "Hi,welcome to Netty ";
+	static final String ECHO_REQ = "Hi,welcome to Netty ";
 
-    static final String DELIMITER = "$_";
+	static final String DELIMITER = "$_";
 
-    static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+	static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        scheduledExecutorService.scheduleAtFixedRate(()
-        ->{
-            int counter = SEQ.incrementAndGet();
-            if (counter % 10 == 0)
-            {
-                ctx.writeAndFlush(Unpooled.copiedBuffer((ECHO_REQ + DELIMITER).getBytes()));
-            }
-            else
-                ctx.writeAndFlush(Unpooled.copiedBuffer(ECHO_REQ.getBytes()));
-        },0,1000, TimeUnit.MILLISECONDS);
-    }
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) {
+		scheduledExecutorService.scheduleAtFixedRate(() -> {
+			int counter = SEQ.incrementAndGet();
+			if (counter % 10 == 0) {
+				ctx.writeAndFlush(Unpooled.copiedBuffer((ECHO_REQ + DELIMITER).getBytes()));
+			} else
+				ctx.writeAndFlush(Unpooled.copiedBuffer(ECHO_REQ.getBytes()));
+		}, 0, 1000, TimeUnit.MILLISECONDS);
+	}
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-	cause.printStackTrace();
-	ctx.close();
-    }
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+		cause.printStackTrace();
+		ctx.close();
+	}
 }
